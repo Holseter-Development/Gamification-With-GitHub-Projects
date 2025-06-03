@@ -1,31 +1,28 @@
-# Get assignee
-assignee=$(jq -r '.issue.assignee.login' "$GITHUB_EVENT_PATH")
+name: Award XP on Issue Close
 
-# Get XP (from label, title, or body)
-issue_body=$(jq -r '.issue.body' "$GITHUB_EVENT_PATH")
-xp=$(echo "$issue_body" | grep -oP 'XP:\s*\K\d+')
+on:
+  issues:
+    types: [closed]
 
-# Read existing XP data
-xp_data=$(cat docs/xp.json)
-current_total=$(echo "$xp_data" | jq '.xp')
-current_level=$(echo "$xp_data" | jq '.level')
-leaderboard=$(echo "$xp_data" | jq '.leaderboard')
+jobs:
+  award-xp:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-# Update assignee XP
-updated_leaderboard=$(echo "$leaderboard" | jq \
-  --arg user "$assignee" --argjson addxp "$xp" '
-  (map(if .user == $user then .xp += $addxp else . end)) +
-  (if any(.user == $user) | not then [{"user": $user, "xp": $addxp}] else [] end)
-')
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-# Recalculate total and level
-new_total=$((current_total + xp))
-# Your own level-up logic here…
+      - name: Award XP
+        run: node .github/scripts/update-xp.js
 
-# Write updated xp.json
-jq -n \
-  --argjson level "$new_level" \
-  --argjson xp "$new_total" \
-  --argjson xpToNext "$next_level_xp" \
-  --argjson leaderboard "$updated_leaderboard" \
-  '{level: $level, xp: $xp, xpToNext: $xpToNext, leaderboard: $leaderboard}' > docs/xp.json
+      - name: Commit updated XP
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/xp.json
+          git commit -m "🏆 XP awarded for issue #${{ github.event.issue.number }}"
+          git push
