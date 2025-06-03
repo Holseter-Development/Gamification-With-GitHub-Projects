@@ -31,3 +31,15 @@ Gamification isn't about trivializing work — it's about **recognizing progress
 ```bash
 git clone https://github.com/JoachimHolseterBouvet/Gamification-With-GitHub-Projects.git
 cd Gamification-With-GitHub-Projects
+```
+
+## 🙌 Contributions
+
+Contributions are welcome — whether it's new features, better visuals, or anything else. This is an open experiment in making digital workspaces just a little more human.
+
+---
+
+## 🎧 Credits
+
+- **Sound effects** used in this project are sourced from [Pixabay](https://pixabay.com/) and are royalty-free.
+  - These sounds remain free to use, but attribution is appreciated.
