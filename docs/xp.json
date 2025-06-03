@@ -1,9 +1,13 @@
 {
-  "xp": 250,
+  "xp": 450,
   "leaderboard": [
     {
       "user": "JoachimHolseterBouvet",
       "xp": 250
+    },
+    {
+      "user": "JoachimHolseter",
+      "xp": 200
     }
   ]
 }
