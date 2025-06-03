@@ -92,12 +92,16 @@ function updateDisplay(data) {
   const leveledUp = progress.level > previousLevel;
 
   levelEl.textContent = progress.level;
-  xpBar.max = progress.xpToNext;
+  xpBar.max = leveledUp
+    ? Math.round(progress.xpToNext / 1.1 / 10) * 10
+    : progress.xpToNext;
 
   if (leveledUp && hasInteracted) {
     levelUpSound.play();
-    animateXPBar(progress.xpToNext, progress.xpToNext); // Full bar
-    xpText.textContent = `${progress.xpToNext} / ${progress.xpToNext} XP`;
+
+    const previousMax = Math.round(progress.xpToNext / 1.25 / 10) * 10;
+    animateXPBar(previousMax, previousMax);
+    xpText.textContent = `${previousMax} / ${previousMax} XP`;
 
     let confettiCount = 0;
     const confettiInterval = setInterval(() => {
@@ -109,8 +113,7 @@ function updateDisplay(data) {
     setTimeout(() => {
       levelEl.textContent = progress.level;
       xpBar.max = progress.xpToNext;
-      xpBar.value = progress.currentXP;
-      xpText.textContent = `${progress.currentXP} / ${progress.xpToNext} XP`;
+      animateXPBar(progress.currentXP, progress.xpToNext);
     }, 10000);
   } else {
     animateXPBar(progress.currentXP, progress.xpToNext);
