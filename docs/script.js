@@ -1,5 +1,5 @@
 let previousXP = 0;
-let previousLevel = 1;
+let previousLevel = 0;
 let hasInteracted = false;
 
 const levelEl = document.getElementById("level");
@@ -16,8 +16,8 @@ window.addEventListener("click", () => {
 });
 
 function calculateLevel(xp) {
-  let level = 1;
-  let required = 100;
+  let level = 0;
+  let required = 200;
   let remaining = xp;
 
   while (remaining >= required) {
@@ -92,7 +92,7 @@ function updateDisplay(data) {
 
   if (leveledUp && hasInteracted) {
     levelUpSound.play();
-    const previousMax = Math.round(progress.xpToNext / 1.25 / 10) * 10;
+    const previousMax = Math.round(progress.xpToNext / 1.1 / 10) * 10;
     animateXPBar(previousMax, previousMax);
     xpText.textContent = `${previousMax} / ${previousMax} XP`;
 
