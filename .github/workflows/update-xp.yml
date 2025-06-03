@@ -1,0 +1,31 @@
+# Get assignee
+assignee=$(jq -r '.issue.assignee.login' "$GITHUB_EVENT_PATH")
+
+# Get XP (from label, title, or body)
+issue_body=$(jq -r '.issue.body' "$GITHUB_EVENT_PATH")
+xp=$(echo "$issue_body" | grep -oP 'XP:\s*\K\d+')
+
+# Read existing XP data
+xp_data=$(cat docs/xp.json)
+current_total=$(echo "$xp_data" | jq '.xp')
+current_level=$(echo "$xp_data" | jq '.level')
+leaderboard=$(echo "$xp_data" | jq '.leaderboard')
+
+# Update assignee XP
+updated_leaderboard=$(echo "$leaderboard" | jq \
+  --arg user "$assignee" --argjson addxp "$xp" '
+  (map(if .user == $user then .xp += $addxp else . end)) +
+  (if any(.user == $user) | not then [{"user": $user, "xp": $addxp}] else [] end)
+')
+
+# Recalculate total and level
+new_total=$((current_total + xp))
+# Your own level-up logic here…
+
+# Write updated xp.json
+jq -n \
+  --argjson level "$new_level" \
+  --argjson xp "$new_total" \
+  --argjson xpToNext "$next_level_xp" \
+  --argjson leaderboard "$updated_leaderboard" \
+  '{level: $level, xp: $xp, xpToNext: $xpToNext, leaderboard: $leaderboard}' > docs/xp.json
