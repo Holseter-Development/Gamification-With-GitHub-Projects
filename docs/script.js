@@ -42,10 +42,10 @@ function loadAchievements() {
       achievementsEl.innerHTML = "";
 
       const grid = document.createElement("div");
-      grid.style.display = "grid";
-      grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(128px, 1fr))";
+      grid.style.display = "flex";
+      grid.style.flexWrap = "wrap";
+      grid.style.justifyContent = "center";
       grid.style.gap = "1rem";
-      grid.style.justifyItems = "center";
       grid.style.padding = "1rem";
       grid.style.maxWidth = "700px";
       grid.style.margin = "0 auto";
