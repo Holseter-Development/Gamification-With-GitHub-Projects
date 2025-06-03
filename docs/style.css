@@ -63,6 +63,7 @@ progress::-webkit-progress-value {
 
 /* Leaderboard */
 ul#leaderboard {
+  margin-bottom: 2rem;
   list-style: none;
   padding: 0;
   display: flex;
@@ -107,13 +108,13 @@ ul#leaderboard li:hover img {
 }
 
 #achievements {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   max-height: 400px;
   overflow-y: auto;
-  padding-top: 1rem;
+  padding-top: 0;
 }
 
 /* Animations */
