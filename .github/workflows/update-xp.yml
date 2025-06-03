@@ -6,6 +6,7 @@ on:
 
 jobs:
   award-xp:
+    if: contains(github.event.issue.labels.*.name, 'XP Award')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
