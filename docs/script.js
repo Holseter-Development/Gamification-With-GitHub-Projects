@@ -86,19 +86,12 @@ function loadAchievements() {
 
 function updateDisplay(data) {
   const progress = calculateLevel(data.xp);
-
   if (!levelEl || !xpBar || !xpText || !leaderboardEl) return;
 
   const leveledUp = progress.level > previousLevel;
 
-  levelEl.textContent = progress.level;
-  xpBar.max = leveledUp
-    ? Math.round(progress.xpToNext / 1.1 / 10) * 10
-    : progress.xpToNext;
-
   if (leveledUp && hasInteracted) {
     levelUpSound.play();
-
     const previousMax = Math.round(progress.xpToNext / 1.25 / 10) * 10;
     animateXPBar(previousMax, previousMax);
     xpText.textContent = `${previousMax} / ${previousMax} XP`;
@@ -116,6 +109,8 @@ function updateDisplay(data) {
       animateXPBar(progress.currentXP, progress.xpToNext);
     }, 10000);
   } else {
+    levelEl.textContent = progress.level;
+    xpBar.max = progress.xpToNext;
     animateXPBar(progress.currentXP, progress.xpToNext);
   }
 
