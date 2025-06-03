@@ -22,7 +22,7 @@ function calculateLevel(xp) {
 
   while (remaining >= required) {
     remaining -= required;
-    required = Math.round((required * 1.25) / 10) * 10;
+    required = Math.round((required * 1.1) / 10) * 10;
     level++;
   }
 
