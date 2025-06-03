@@ -15,7 +15,7 @@ jobs:
       - name: Generate index.json
         run: |
           mkdir -p docs/achievements
-          ls -tp docs/achievements | grep -v '/$' | grep -v index.json | head -n 100 | jq -R -s -c 'split(\"\\n\") | map(select(length > 0))' > docs/achievements/index.json
+          ls -tp docs/achievements | grep -v '/$' | grep -v index.json | head -n 100 | jq -R -s -c 'split("\n") | map(select(length > 0))' > docs/achievements/index.json
 
       - name: Commit changes
         run: |
