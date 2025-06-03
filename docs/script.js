@@ -89,8 +89,16 @@ function updateDisplay(data) {
 
   if (!levelEl || !xpBar || !xpText || !leaderboardEl) return;
 
-  if (progress.level > previousLevel && hasInteracted) {
+  const leveledUp = progress.level > previousLevel;
+
+  levelEl.textContent = progress.level;
+  xpBar.max = progress.xpToNext;
+
+  if (leveledUp && hasInteracted) {
     levelUpSound.play();
+    animateXPBar(progress.xpToNext, progress.xpToNext); // Full bar
+    xpText.textContent = `${progress.xpToNext} / ${progress.xpToNext} XP`;
+
     let confettiCount = 0;
     const confettiInterval = setInterval(() => {
       confetti({ particleCount: 75, spread: 70, origin: { y: 0.6 } });
@@ -101,11 +109,10 @@ function updateDisplay(data) {
     setTimeout(() => {
       levelEl.textContent = progress.level;
       xpBar.max = progress.xpToNext;
-      animateXPBar(progress.currentXP, progress.xpToNext);
+      xpBar.value = progress.currentXP;
+      xpText.textContent = `${progress.currentXP} / ${progress.xpToNext} XP`;
     }, 10000);
   } else {
-    levelEl.textContent = progress.level;
-    xpBar.max = progress.xpToNext;
     animateXPBar(progress.currentXP, progress.xpToNext);
   }
 
