@@ -41,27 +41,28 @@ function loadAchievements() {
       if (!achievementsEl) return;
       achievementsEl.innerHTML = "";
 
-      for (let i = 0; i < files.length; i += 5) {
-        const row = document.createElement("div");
-        row.style.display = "flex";
-        row.style.justifyContent = "center";
-        row.style.gap = "1rem";
-        row.style.marginBottom = "1rem";
+      const grid = document.createElement("div");
+      grid.style.display = "grid";
+      grid.style.gridTemplateColumns = "repeat(auto-fill, minmax(128px, 1fr))";
+      grid.style.gap = "1rem";
+      grid.style.justifyItems = "center";
+      grid.style.padding = "1rem";
+      grid.style.maxWidth = "700px";
+      grid.style.margin = "0 auto";
 
-        files.slice(i, i + 5).forEach((filename) => {
-          const img = document.createElement("img");
-          img.src = `achievements/${filename}`;
-          img.alt = filename;
-          img.style.width = "128px";
-          img.style.height = "128px";
-          img.style.objectFit = "cover";
-          img.style.borderRadius = "12px";
-          img.style.boxShadow = "0 0 6px rgba(0, 0, 0, 0.3)";
-          row.appendChild(img);
-        });
+      files.forEach((filename) => {
+        const img = document.createElement("img");
+        img.src = `achievements/${filename}`;
+        img.alt = filename;
+        img.style.width = "128px";
+        img.style.height = "128px";
+        img.style.objectFit = "contain";
+        img.style.borderRadius = "12px";
+        img.style.boxShadow = "0 0 6px rgba(0, 0, 0, 0.3)";
+        grid.appendChild(img);
+      });
 
-        achievementsEl.appendChild(row);
-      }
+      achievementsEl.appendChild(grid);
     });
 }
 
