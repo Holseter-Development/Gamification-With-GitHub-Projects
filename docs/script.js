@@ -35,7 +35,7 @@ function calculateLevel(xp) {
 }
 
 function loadAchievements() {
-  fetch("achievements/index.json")
+  fetch(`achievements/index.json?t=${Date.now()}`)
     .then((res) => res.json())
     .then((files) => {
       if (!achievementsEl) return;
@@ -52,8 +52,8 @@ function loadAchievements() {
           const img = document.createElement("img");
           img.src = `achievements/${filename}`;
           img.alt = filename;
-          img.style.width = "100px";
-          img.style.height = "100px";
+          img.style.width = "128px";
+          img.style.height = "128px";
           img.style.objectFit = "cover";
           img.style.borderRadius = "12px";
           img.style.boxShadow = "0 0 6px rgba(0, 0, 0, 0.3)";
@@ -141,7 +141,8 @@ function updateDisplay(data) {
 }
 
 function fetchAndUpdate() {
-  fetch("xp.json")
+  const url = `xp.json?t=${Date.now()}`;
+  fetch(url)
     .then((res) => res.json())
     .then((data) => {
       if (data.xp !== previousXP) {
@@ -151,5 +152,5 @@ function fetchAndUpdate() {
 }
 
 fetchAndUpdate();
-setInterval(fetchAndUpdate, 30000);
+setInterval(fetchAndUpdate, 10000);
 loadAchievements();
