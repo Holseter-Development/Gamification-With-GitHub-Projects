@@ -97,14 +97,20 @@ function updateDisplay(data) {
       confettiCount++;
       if (confettiCount >= 10) clearInterval(confettiInterval);
     }, 1000);
+
+    setTimeout(() => {
+      levelEl.textContent = progress.level;
+      xpBar.max = progress.xpToNext;
+      animateXPBar(progress.currentXP, progress.xpToNext);
+    }, 10000);
+  } else {
+    levelEl.textContent = progress.level;
+    xpBar.max = progress.xpToNext;
+    animateXPBar(progress.currentXP, progress.xpToNext);
   }
 
   previousLevel = progress.level;
   previousXP = progress.totalXP;
-
-  levelEl.textContent = progress.level;
-  xpBar.max = progress.xpToNext;
-  animateXPBar(progress.currentXP, progress.xpToNext);
 
   leaderboardEl.innerHTML = "";
   let topXP = -1;
