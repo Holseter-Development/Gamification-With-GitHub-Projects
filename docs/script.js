@@ -34,6 +34,24 @@ function calculateLevel(xp) {
   };
 }
 
+function animateXPBar(currentXP, xpToNext) {
+  let current = 0;
+  const increment = Math.ceil(currentXP / 120);
+
+  const animate = () => {
+    current += increment;
+    if (current > currentXP) current = currentXP;
+    xpBar.value = current;
+    xpText.textContent = `${current} / ${xpToNext} XP`;
+
+    if (current < currentXP) {
+      requestAnimationFrame(animate);
+    }
+  };
+
+  animate();
+}
+
 function loadAchievements() {
   fetch(`achievements/index.json?t=${Date.now()}`)
     .then((res) => res.json())
@@ -79,11 +97,6 @@ function updateDisplay(data) {
       confettiCount++;
       if (confettiCount >= 10) clearInterval(confettiInterval);
     }, 1000);
-
-    setTimeout(() => {
-      xpBar.value = 0;
-      xpText.textContent = `0 / ${progress.xpToNext} XP`;
-    }, 10000);
   }
 
   previousLevel = progress.level;
@@ -91,22 +104,7 @@ function updateDisplay(data) {
 
   levelEl.textContent = progress.level;
   xpBar.max = progress.xpToNext;
-
-  let current = 0;
-  const increment = Math.ceil(progress.currentXP / 120);
-
-  const animateXP = () => {
-    current += increment;
-    if (current > progress.currentXP) current = progress.currentXP;
-    xpBar.value = current;
-    xpText.textContent = `${current} / ${progress.xpToNext} XP`;
-
-    if (current < progress.currentXP) {
-      requestAnimationFrame(animateXP);
-    }
-  };
-
-  animateXP();
+  animateXPBar(progress.currentXP, progress.xpToNext);
 
   leaderboardEl.innerHTML = "";
   let topXP = -1;
