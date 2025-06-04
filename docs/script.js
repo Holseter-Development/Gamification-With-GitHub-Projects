@@ -7,6 +7,8 @@ const xpBar = document.getElementById("xpBar");
 const xpText = document.getElementById("xpText");
 const leaderboardEl = document.getElementById("leaderboard");
 const achievementsEl = document.getElementById("achievements");
+const tooltipEl = document.getElementById("achievement-tooltip");
+let activeAchievement = null;
 let leaderboardLoaded = false;
 
 const levelUpSound = new Audio("sounds/level-up.mp3");
@@ -57,6 +59,20 @@ function animateXPBar(currentXP, xpToNext) {
   animate();
 }
 
+function showBadgeTooltip(img) {
+  if (!tooltipEl) return;
+  tooltipEl.innerHTML = `<strong>${img.dataset.title}</strong><br>${img.dataset.xp} XP - Level ${img.dataset.level}`;
+  const rect = img.getBoundingClientRect();
+  tooltipEl.style.left = `${rect.left + rect.width / 2 + window.scrollX}px`;
+  tooltipEl.style.top = `${rect.top + window.scrollY - 8}px`;
+  tooltipEl.classList.add("show");
+}
+
+function hideBadgeTooltip() {
+  if (!tooltipEl) return;
+  tooltipEl.classList.remove("show");
+}
+
 function loadAchievementsAndXP() {
   fetch(
     "https://api.github.com/repos/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/contents/docs/achievements"
@@ -88,20 +104,51 @@ function loadAchievementsAndXP() {
       grid.style.margin = "0 auto";
 
       badgeFiles.forEach((file) => {
-        const match = file.name.match(/^\d+_(\d+)xp_([\w\-]+)\.png$/i);
-        if (!match) return;
+        const xpMatch = file.name.match(/_(\d+)xp_/i);
+        if (!xpMatch) return;
 
-        const xp = parseInt(match[1]);
+        const xp = parseInt(xpMatch[1]);
         totalXP += xp;
 
-        const rawTitle = match[2].replace(/[_\-]/g, " ").toUpperCase();
-        const displayTitle = `${rawTitle} - ${xp}XP`;
+        let namePart = file.name
+          .replace(/^\d+_\d+xp_/, "")
+          .replace(/\.png$/i, "");
+        const lvlMatch = namePart.match(/(?:_|-)lvl(\d+)/i);
+        const level = lvlMatch ? parseInt(lvlMatch[1]) : 1;
+        if (lvlMatch) {
+          namePart = namePart.replace(lvlMatch[0], "");
+        }
+
+        const rawTitle = namePart.replace(/[_\-]/g, " ").trim();
+        const displayTitle = `${rawTitle.toUpperCase()} - ${xp} XP - Level ${level}`;
 
         const img = document.createElement("img");
         img.src = file.download_url;
         img.alt = displayTitle;
         img.title = displayTitle;
         img.className = "achievement";
+        img.dataset.title = rawTitle;
+        img.dataset.xp = xp;
+        img.dataset.level = level;
+
+        img.addEventListener("mouseenter", () => showBadgeTooltip(img));
+        img.addEventListener("mouseleave", () => {
+          if (activeAchievement !== img) hideBadgeTooltip();
+        });
+        img.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (activeAchievement === img) {
+            img.classList.remove("active");
+            activeAchievement = null;
+            hideBadgeTooltip();
+          } else {
+            if (activeAchievement) activeAchievement.classList.remove("active");
+            activeAchievement = img;
+            img.classList.add("active");
+            showBadgeTooltip(img);
+          }
+        });
+
         grid.appendChild(img);
       });
 
@@ -176,3 +223,13 @@ function updateDisplay(data) {
 fetchAndUpdate = loadAchievementsAndXP;
 fetchAndUpdate();
 setInterval(fetchAndUpdate, 10000);
+
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".achievement")) {
+    if (activeAchievement) {
+      activeAchievement.classList.remove("active");
+      activeAchievement = null;
+    }
+    hideBadgeTooltip();
+  }
+});
