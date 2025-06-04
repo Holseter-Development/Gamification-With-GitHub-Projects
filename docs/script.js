@@ -147,6 +147,21 @@ function updateDisplay(data) {
     animateXPBar(progress.currentXP, progress.xpToNext);
   }
 
+
+  leaderboardEl.innerHTML = "";
+  data.leaderboard
+    .sort((a, b) => b.xp - a.xp)
+    .forEach((entry) => {
+      const li = document.createElement("li");
+      const img = document.createElement("img");
+      img.src = `https://github.com/${entry.user}.png?size=64`;
+      img.alt = entry.user;
+      const span = document.createElement("span");
+      span.textContent = `${entry.user} - ${entry.xp} XP`;
+      li.appendChild(img);
+      li.appendChild(span);
+      leaderboardEl.appendChild(li);
+    });
   previousLevel = progress.level;
   previousXP = progress.totalXP;
 }
