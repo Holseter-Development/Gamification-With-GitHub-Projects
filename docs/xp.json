@@ -1,13 +1,21 @@
 {
-  "xp": 200,
+  "xp": 250,
   "leaderboard": [
     {
       "user": "JoachimHolseter",
-      "xp": 50
+      "xp": 100
     },
     {
       "user": "JoachimHolseterBouvet",
       "xp": 150
+    }
+  ],
+  "contributions": [
+    {
+      "user": "JoachimHolseter",
+      "title": "[Story] Test issue #5",
+      "xp": 50,
+      "timestamp": "2025-06-04T10:26:40.878Z"
     }
   ]
 }
