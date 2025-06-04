@@ -7,6 +7,7 @@ const xpBar = document.getElementById("xpBar");
 const xpText = document.getElementById("xpText");
 const leaderboardEl = document.getElementById("leaderboard");
 const achievementsEl = document.getElementById("achievements");
+let leaderboardLoaded = false;
 
 const levelUpSound = new Audio("sounds/level-up.mp3");
 const coinSound = new Audio("sounds/coin.mp3");
@@ -35,16 +36,20 @@ function calculateLevel(xp) {
 }
 
 function animateXPBar(currentXP, xpToNext) {
-  let current = 0;
-  const increment = Math.ceil(currentXP / 120);
+  let current = parseInt(xpBar.value || 0, 10);
+  const distance = Math.abs(currentXP - current);
+  const increment = Math.ceil(distance / 120) || 1;
+  const direction = currentXP >= current ? 1 : -1;
 
   const animate = () => {
-    current += increment;
-    if (current > currentXP) current = currentXP;
+    current += increment * direction;
+    if ((direction === 1 && current > currentXP) || (direction === -1 && current < currentXP)) {
+      current = currentXP;
+    }
     xpBar.value = current;
     xpText.textContent = `${current} / ${xpToNext} XP`;
 
-    if (current < currentXP) {
+    if (current !== currentXP) {
       requestAnimationFrame(animate);
     }
   };
@@ -148,6 +153,9 @@ function updateDisplay(data) {
   }
 
 
+  if (leaderboardLoaded) {
+    leaderboardEl.classList.add("loaded");
+  }
   leaderboardEl.innerHTML = "";
   data.leaderboard
     .sort((a, b) => b.xp - a.xp)
@@ -162,6 +170,9 @@ function updateDisplay(data) {
       li.appendChild(span);
       leaderboardEl.appendChild(li);
     });
+  if (!leaderboardLoaded) {
+    leaderboardLoaded = true;
+  }
   previousLevel = progress.level;
   previousXP = progress.totalXP;
 }
