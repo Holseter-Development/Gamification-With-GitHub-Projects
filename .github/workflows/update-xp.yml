@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Award XP
-        run: node .github/scripts/update-xp.js
+        run: node .github/scripts/update-xp.cjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
