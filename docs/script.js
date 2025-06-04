@@ -77,7 +77,7 @@ function loadAchievementsAndXP() {
       if (!Array.isArray(files)) return;
 
       const badgeFiles = files.filter((f) =>
-        f.name.match(/^(\d+)_+(\d+)xp_+([\w\-]+)\.png$/i)
+        f.name.match(/^\d+_+(\d+)xp_+([\w\-]+)\.png$/i)
       );
 
       badgeFiles.sort((a, b) => {
@@ -100,11 +100,11 @@ function loadAchievementsAndXP() {
       grid.style.margin = "0 auto";
 
       badgeFiles.forEach((file) => {
-        const match = file.name.match(/^(\d+)_+(\d+)xp_+([\w\-]+)\.png$/i);
+        const match = file.name.match(/^\d+_+(\d+)xp_+([\w\-]+)\.png$/i);
         if (!match) return;
 
-        const xp = parseInt(match[2]);
-        const rawTitle = match[3].replace(/[_\-]/g, " ").toUpperCase();
+        const xp = parseInt(match[1]);
+        const rawTitle = match[2].replace(/[_\-]/g, " ").toUpperCase();
         totalXP += xp;
 
         const img = document.createElement("img");
@@ -123,6 +123,7 @@ function loadAchievementsAndXP() {
           action: "earned",
           title: rawTitle,
           xp,
+          image: file.download_url,
         });
       });
 
@@ -180,11 +181,29 @@ function updateDisplay(data) {
   if (config.showContributionLog && Array.isArray(data.contributions)) {
     contributionLogEl.innerHTML = "<ul></ul>";
     const ul = contributionLogEl.querySelector("ul");
-    data.contributions.forEach((entry) => {
-      const li = document.createElement("li");
-      li.textContent = `✅ ${entry.user} ${entry.action} \"${entry.title}\" - ${entry.xp}XP`;
-      ul.appendChild(li);
-    });
+    data.contributions
+      .slice(-5)
+      .reverse()
+      .forEach((entry, index) => {
+        const li = document.createElement("li");
+        if (index === 4) li.style.opacity = "0.5";
+
+        if (entry.image) {
+          const img = document.createElement("img");
+          img.src = entry.image;
+          img.alt = entry.title;
+          img.width = 32;
+          img.height = 32;
+          img.style.marginRight = "0.5rem";
+          li.appendChild(img);
+        }
+
+        const text = document.createElement("span");
+        text.textContent = `✅ ${entry.user} ${entry.action} "${entry.title}" - ${entry.xp}XP`;
+        li.appendChild(text);
+
+        ul.appendChild(li);
+      });
   }
 }
 

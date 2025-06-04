@@ -28,6 +28,7 @@ let xpData = {
   xpToNext: 100,
   leaderboard: [],
   contributions: [],
+  badges: [],
 };
 if (fs.existsSync(xpPath)) {
   xpData = JSON.parse(fs.readFileSync(xpPath, "utf8"));
@@ -42,17 +43,16 @@ if (userEntry) {
   xpData.leaderboard.push({ user: assignee, xp: xpAmount });
 }
 
-// Ensure contributions array exists
 if (!xpData.contributions) {
   xpData.contributions = [];
 }
 
-// Add new contribution
 xpData.contributions.push({
   user: assignee,
   title: issue.title,
   xp: xpAmount,
   timestamp: new Date().toISOString(),
+  type: "issue",
 });
 
 fs.writeFileSync(xpPath, JSON.stringify(xpData, null, 2));
