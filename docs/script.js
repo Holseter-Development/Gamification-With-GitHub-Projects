@@ -19,6 +19,7 @@ let config = {
   enableConfetti: true,
   playsoundEffects: true,
   refreshInterval: 10000,
+  xpLevelMultiplier: 1.1,
 };
 
 window.addEventListener("click", () => {
@@ -32,7 +33,7 @@ function calculateLevel(xp) {
 
   while (remaining >= required) {
     remaining -= required;
-    required = Math.round((required * 1.1) / 10) * 10;
+    required = Math.round((required * config.xpLevelMultiplier) / 10) * 10;
     level++;
   }
 
@@ -62,77 +63,6 @@ function animateXPBar(currentXP, xpToNext) {
   animate();
 }
 
-function loadAchievementsAndXP() {
-  fetch("./config.json")
-    .then((res) => res.json())
-    .then((cfg) => {
-      config = cfg;
-      updateVisibility();
-      return fetch(
-        "https://api.github.com/repos/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/contents/docs/achievements"
-      );
-    })
-    .then((res) => res.json())
-    .then((files) => {
-      if (!Array.isArray(files)) return;
-
-      const badgeFiles = files.filter((f) =>
-        f.name.match(/^\d+_+(\d+)xp_+([\w\-]+)\.png$/i)
-      );
-
-      badgeFiles.sort((a, b) => {
-        const ai = parseInt(a.name.split("_")[0]);
-        const bi = parseInt(b.name.split("_")[0]);
-        return bi - ai;
-      });
-
-      let totalXP = 0;
-      let contributions = [];
-
-      achievementsEl.innerHTML = "";
-      const grid = document.createElement("div");
-      grid.style.display = "flex";
-      grid.style.flexWrap = "wrap";
-      grid.style.justifyContent = "center";
-      grid.style.gap = "1rem";
-      grid.style.padding = "1rem";
-      grid.style.maxWidth = "700px";
-      grid.style.margin = "0 auto";
-
-      badgeFiles.forEach((file) => {
-        const match = file.name.match(/^\d+_+(\d+)xp_+([\w\-]+)\.png$/i);
-        if (!match) return;
-
-        const xp = parseInt(match[1]);
-        const rawTitle = match[2].replace(/[_\-]/g, " ").toUpperCase();
-        totalXP += xp;
-
-        const img = document.createElement("img");
-        img.src = file.download_url;
-        img.alt = rawTitle;
-        img.title = `${rawTitle} - ${xp}XP`;
-        img.style.width = "128px";
-        img.style.height = "128px";
-        img.style.objectFit = "contain";
-        img.style.borderRadius = "12px";
-        img.style.boxShadow = "0 0 6px rgba(0, 0, 0, 0.3)";
-        grid.appendChild(img);
-
-        contributions.push({
-          user: "team",
-          action: "earned",
-          title: rawTitle,
-          xp,
-          image: file.download_url,
-        });
-      });
-
-      achievementsEl.appendChild(grid);
-
-      updateDisplay({ xp: totalXP, leaderboard: [], contributions });
-    });
-}
-
 function updateVisibility() {
   if (leaderboardEl)
     leaderboardEl.style.display = config.showLeaderboard ? "block" : "none";
@@ -144,10 +74,85 @@ function updateVisibility() {
     achievementsEl.style.display = config.showBadges ? "block" : "none";
 }
 
+function loadAchievementsAndXP() {
+  fetch("./config.json")
+    .then((res) => res.json())
+    .then((cfg) => {
+      config = cfg;
+      updateVisibility();
+      return Promise.all([
+        fetch("./xp.json").then((res) => res.json()),
+        fetch(
+          "https://api.github.com/repos/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/contents/docs/achievements"
+        ).then((res) => res.json()),
+      ]);
+    })
+    .then(([xpData, badgeFiles]) => {
+      if (!Array.isArray(badgeFiles)) badgeFiles = [];
+
+      const parsedBadges = badgeFiles.filter((f) =>
+        f.name.match(/\d+_(\d+)xp_([\w\-]+)\.png/i)
+      );
+
+      parsedBadges.sort((a, b) => {
+        const ai = parseInt(a.name.split("_")[0]);
+        const bi = parseInt(b.name.split("_")[0]);
+        return bi - ai;
+      });
+
+      const badgeContributions = parsedBadges.map((file) => {
+        const match = file.name.match(/\d+_(\d+)xp_([\w\-]+)\.png/i);
+        const xp = parseInt(match[1]);
+        const title = match[2].replace(/[_\-]/g, " ").toUpperCase();
+        return {
+          user: "team",
+          action: "earned",
+          title,
+          xp,
+          image: file.download_url,
+        };
+      });
+
+      achievementsEl.innerHTML = "";
+      const grid = document.createElement("div");
+      grid.style.display = "flex";
+      grid.style.flexWrap = "wrap";
+      grid.style.justifyContent = "center";
+      grid.style.gap = "1rem";
+      grid.style.padding = "1rem";
+      grid.style.maxWidth = "700px";
+      grid.style.margin = "0 auto";
+
+      badgeContributions.forEach((entry) => {
+        const img = document.createElement("img");
+        img.src = entry.image;
+        img.alt = entry.title;
+        img.title = `${entry.title} - ${entry.xp}XP`;
+        img.style.width = "128px";
+        img.style.height = "128px";
+        img.style.objectFit = "contain";
+        img.style.borderRadius = "12px";
+        img.style.boxShadow = "0 0 6px rgba(0, 0, 0, 0.3)";
+        grid.appendChild(img);
+      });
+
+      achievementsEl.appendChild(grid);
+
+      const contributions = [
+        ...(xpData.contributions || []),
+        ...badgeContributions,
+      ];
+
+      updateDisplay({
+        xp: xpData.xp,
+        leaderboard: xpData.leaderboard,
+        contributions,
+      });
+    });
+}
+
 function updateDisplay(data) {
   const progress = calculateLevel(data.xp);
-  if (!levelEl || !xpBar || !xpText) return;
-
   const leveledUp = progress.level > previousLevel;
 
   if (leveledUp && hasInteracted && config.enableConfetti) {
@@ -200,6 +205,31 @@ function updateDisplay(data) {
 
         const text = document.createElement("span");
         text.textContent = `✅ ${entry.user} ${entry.action} "${entry.title}" - ${entry.xp}XP`;
+        li.appendChild(text);
+
+        ul.appendChild(li);
+      });
+  }
+
+  if (config.showLeaderboard && Array.isArray(data.leaderboard)) {
+    leaderboardEl.innerHTML = "<ul></ul>";
+    const ul = leaderboardEl.querySelector("ul");
+    data.leaderboard
+      .sort((a, b) => b.xp - a.xp)
+      .slice(0, 5)
+      .forEach((entry, index) => {
+        const li = document.createElement("li");
+        if (index === 4) li.style.opacity = "0.5";
+
+        const avatar = document.createElement("img");
+        avatar.src = `https://github.com/${entry.user}.png`;
+        avatar.alt = entry.user;
+        avatar.width = 48;
+        avatar.height = 48;
+        li.appendChild(avatar);
+
+        const text = document.createElement("span");
+        text.textContent = `@${entry.user} - ${entry.xp} XP`;
         li.appendChild(text);
 
         ul.appendChild(li);
