@@ -22,7 +22,13 @@ if (!assignee || !xpAmount) {
   process.exit(0);
 }
 
-let xpData = { xp: 0, level: 1, xpToNext: 100, leaderboard: [] };
+let xpData = {
+  xp: 0,
+  level: 1,
+  xpToNext: 100,
+  leaderboard: [],
+  contributions: [],
+};
 if (fs.existsSync(xpPath)) {
   xpData = JSON.parse(fs.readFileSync(xpPath, "utf8"));
 }
@@ -35,6 +41,19 @@ if (userEntry) {
 } else {
   xpData.leaderboard.push({ user: assignee, xp: xpAmount });
 }
+
+// Ensure contributions array exists
+if (!xpData.contributions) {
+  xpData.contributions = [];
+}
+
+// Add new contribution
+xpData.contributions.push({
+  user: assignee,
+  title: issue.title,
+  xp: xpAmount,
+  timestamp: new Date().toISOString(),
+});
 
 fs.writeFileSync(xpPath, JSON.stringify(xpData, null, 2));
 console.log(`✅ Added ${xpAmount} XP to ${assignee}`);

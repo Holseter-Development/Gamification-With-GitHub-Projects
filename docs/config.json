@@ -1,0 +1,8 @@
+{
+  "showLeaderboard": false,
+  "showContributionLog": true,
+  "showBadges": true,
+  "enableConfetti": true,
+  "playsoundEffects": true,
+  "refreshInterval": 10000
+}

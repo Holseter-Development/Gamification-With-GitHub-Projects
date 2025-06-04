@@ -14,13 +14,25 @@
     <script src="script.js" defer></script>
   </head>
   <body>
-    <h1>Team Level: <span id="level">0</span></h1>
-    <progress id="xpBar" value="0" max="200"></progress>
-    <p id="xpText">0 / 200 XP</p>
+    <div id="teamLevel">
+      <h1>Team Level: <span id="level">0</span></h1>
+      <progress id="xpBar" value="0" max="200"></progress>
+      <p id="xpText">0 / 200 XP</p>
+    </div>
 
-    <h2>Leaderboard</h2>
-    <ul id="leaderboard"></ul>
-    <h2>Achievements</h2>
-    <div id="achievements"></div>
+    <div id="leaderboardContainer">
+      <h2>Leaderboard</h2>
+      <ul id="leaderboard"></ul>
+    </div>
+
+    <div id="contributionLog" style="display: none">
+      <h2>Contribution Log</h2>
+      <ul></ul>
+    </div>
+
+    <div id="achievementsContainer">
+      <h2>Achievements</h2>
+      <div id="achievements"></div>
+    </div>
   </body>
 </html>
