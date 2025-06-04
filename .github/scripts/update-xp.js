@@ -24,12 +24,11 @@ if (!assignee || !xpAmount) {
 
 let xpData = {
   xp: 0,
-  level: 1,
-  xpToNext: 100,
   leaderboard: [],
   contributions: [],
   badges: [],
 };
+
 if (fs.existsSync(xpPath)) {
   xpData = JSON.parse(fs.readFileSync(xpPath, "utf8"));
 }
@@ -41,10 +40,6 @@ if (userEntry) {
   userEntry.xp += xpAmount;
 } else {
   xpData.leaderboard.push({ user: assignee, xp: xpAmount });
-}
-
-if (!xpData.contributions) {
-  xpData.contributions = [];
 }
 
 xpData.contributions.push({

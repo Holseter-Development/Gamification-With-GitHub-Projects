@@ -1,3 +1,4 @@
+// script.js
 let previousXP = 0;
 let previousLevel = 0;
 let hasInteracted = false;
@@ -204,7 +205,9 @@ function updateDisplay(data) {
         }
 
         const text = document.createElement("span");
-        text.textContent = `✅ ${entry.user} ${entry.action} "${entry.title}" - ${entry.xp}XP`;
+        text.textContent = `✅ ${entry.user} ${entry.action || "closed"} "${
+          entry.title
+        }" - ${entry.xp}XP`;
         li.appendChild(text);
 
         ul.appendChild(li);
