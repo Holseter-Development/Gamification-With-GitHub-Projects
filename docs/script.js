@@ -52,13 +52,27 @@ function animateXPBar(currentXP, xpToNext) {
   animate();
 }
 
-function loadAchievements() {
-  fetch(`achievements/index.json?t=${Date.now()}`)
+function loadAchievementsAndXP() {
+  fetch(
+    "https://api.github.com/repos/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/contents/docs/achievements"
+  )
     .then((res) => res.json())
     .then((files) => {
-      if (!achievementsEl) return;
-      achievementsEl.innerHTML = "";
+      if (!Array.isArray(files)) return;
 
+      const badgeFiles = files.filter((f) =>
+        f.name.match(/^[0-9]+_[0-9]+xp_/i)
+      );
+
+      badgeFiles.sort((a, b) => {
+        const ai = parseInt(a.name.split("_")[0]);
+        const bi = parseInt(b.name.split("_")[0]);
+        return bi - ai;
+      });
+
+      let totalXP = 0;
+
+      achievementsEl.innerHTML = "";
       const grid = document.createElement("div");
       grid.style.display = "flex";
       grid.style.flexWrap = "wrap";
@@ -68,10 +82,20 @@ function loadAchievements() {
       grid.style.maxWidth = "700px";
       grid.style.margin = "0 auto";
 
-      files.forEach((filename) => {
+      badgeFiles.forEach((file) => {
+        const match = file.name.match(/^\d+_(\d+)xp_([\w\-]+)\.png$/i);
+        if (!match) return;
+
+        const xp = parseInt(match[1]);
+        totalXP += xp;
+
+        const rawTitle = match[2].replace(/[_\-]/g, " ").toUpperCase();
+        const displayTitle = `${rawTitle} - ${xp}XP`;
+
         const img = document.createElement("img");
-        img.src = `achievements/${filename}`;
-        img.alt = filename;
+        img.src = file.download_url;
+        img.alt = displayTitle;
+        img.title = displayTitle;
         img.style.width = "128px";
         img.style.height = "128px";
         img.style.objectFit = "contain";
@@ -81,6 +105,8 @@ function loadAchievements() {
       });
 
       achievementsEl.appendChild(grid);
+
+      updateDisplay({ xp: totalXP, leaderboard: [] });
     });
 }
 
@@ -116,51 +142,8 @@ function updateDisplay(data) {
 
   previousLevel = progress.level;
   previousXP = progress.totalXP;
-
-  leaderboardEl.innerHTML = "";
-  let topXP = -1;
-
-  data.leaderboard
-    .sort((a, b) => b.xp - a.xp)
-    .forEach((entry, index) => {
-      const li = document.createElement("li");
-      const avatar = document.createElement("img");
-      avatar.src = `https://github.com/${entry.user}.png`;
-      avatar.alt = entry.user;
-      avatar.width = 48;
-      avatar.height = 48;
-
-      const text = document.createElement("span");
-      text.textContent = `@${entry.user} - ${entry.xp} XP`;
-
-      li.appendChild(avatar);
-      li.appendChild(text);
-
-      leaderboardEl.appendChild(li);
-
-      if (index === 0 && entry.xp > topXP && hasInteracted) {
-        setTimeout(() => {
-          coinSound.play();
-        }, 1000);
-      }
-
-      if (entry.xp > topXP) {
-        topXP = entry.xp;
-      }
-    });
 }
 
-function fetchAndUpdate() {
-  const url = `xp.json?t=${Date.now()}`;
-  fetch(url)
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.xp !== previousXP) {
-        updateDisplay(data);
-      }
-    });
-}
-
+fetchAndUpdate = loadAchievementsAndXP;
 fetchAndUpdate();
 setInterval(fetchAndUpdate, 10000);
-loadAchievements();
