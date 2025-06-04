@@ -83,6 +83,11 @@ ul#leaderboard li {
   opacity: 0;
 }
 
+ul#leaderboard.loaded li {
+  animation: none;
+  opacity: 1;
+}
+
 ul#leaderboard li:nth-child(1) {
   animation-delay: 0.1s;
 }
