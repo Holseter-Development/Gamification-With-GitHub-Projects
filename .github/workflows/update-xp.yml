@@ -17,8 +17,14 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install dependencies
+        working-directory: .github/scripts
+        run: npm install
+
       - name: Award XP
         run: node .github/scripts/update-xp.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit updated XP
         run: |
