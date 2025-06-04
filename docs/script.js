@@ -7,8 +7,11 @@ const levelEl = document.getElementById("level");
 const xpBar = document.getElementById("xpBar");
 const xpText = document.getElementById("xpText");
 const leaderboardEl = document.getElementById("leaderboard");
+const leaderboardSection = document.getElementById("leaderboardSection");
 const achievementsEl = document.getElementById("achievements");
+const achievementsSection = document.getElementById("achievements");
 const contributionLogEl = document.getElementById("contributionLog");
+const contributionSection = document.getElementById("contributionSection");
 
 const levelUpSound = new Audio("sounds/level-up.mp3");
 const coinSound = new Audio("sounds/coin.mp3");
@@ -65,14 +68,16 @@ function animateXPBar(currentXP, xpToNext) {
 }
 
 function updateVisibility() {
-  if (leaderboardEl)
-    leaderboardEl.style.display = config.showLeaderboard ? "block" : "none";
-  if (contributionLogEl)
-    contributionLogEl.style.display = config.showContributionLog
+  if (leaderboardSection)
+    leaderboardSection.style.display = config.showLeaderboard
       ? "block"
       : "none";
-  if (achievementsEl)
-    achievementsEl.style.display = config.showBadges ? "block" : "none";
+  if (contributionSection)
+    contributionSection.style.display = config.showContributionLog
+      ? "block"
+      : "none";
+  if (achievementsSection)
+    achievementsSection.style.display = config.showBadges ? "block" : "none";
 }
 
 function loadAchievementsAndXP() {

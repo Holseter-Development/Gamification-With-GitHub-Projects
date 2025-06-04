@@ -1,5 +1,5 @@
 {
-  "showLeaderboard": true,
+  "showLeaderboard": false,
   "showContributionLog": true,
   "showBadges": true,
   "enableConfetti": true,
