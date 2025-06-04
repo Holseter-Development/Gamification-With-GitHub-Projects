@@ -106,7 +106,14 @@ function loadAchievementsAndXP() {
 
       achievementsEl.appendChild(grid);
 
-      updateDisplay({ xp: totalXP, leaderboard: [] });
+      fetch(`xp.json?t=${Date.now()}`)
+        .then((res) => res.json())
+        .then((data) => {
+          updateDisplay({
+            xp: totalXP,
+            leaderboard: data.leaderboard || [],
+          });
+        });
     });
 }
 
