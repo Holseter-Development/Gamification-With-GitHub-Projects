@@ -1,4 +1,9 @@
 {
-  "xp": 0,
-  "leaderboard": []
+  "xp": 50,
+  "leaderboard": [
+    {
+      "user": "JoachimHolseter",
+      "xp": 50
+    }
+  ]
 }
