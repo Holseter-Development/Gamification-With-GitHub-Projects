@@ -63,7 +63,7 @@ function animateXPBar(currentXP, xpToNext) {
 }
 
 function loadAchievementsAndXP() {
-  fetch("docs/config.json")
+  fetch("./config.json")
     .then((res) => res.json())
     .then((cfg) => {
       config = cfg;
