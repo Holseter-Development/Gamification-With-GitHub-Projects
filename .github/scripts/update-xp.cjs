@@ -1,4 +1,4 @@
-// update-xp.js
+// update-xp.cjs
 const fs = require("fs");
 const path = require("path");
 const { Octokit } = require("@octokit/rest");
@@ -58,12 +58,15 @@ async function updateXP() {
     ? JSON.parse(fs.readFileSync(XP_FILE_PATH, "utf8"))
     : { xp: 0, leaderboard: [], contributions: [], badges: [] };
 
+  xpData.contributions = Array.isArray(xpData.contributions)
+    ? xpData.contributions
+    : [];
+  xpData.badges = Array.isArray(xpData.badges) ? xpData.badges : [];
+
   const processedIssues = new Set(
     xpData.contributions.filter((c) => c.type === "issue").map((c) => c.title)
   );
-  const processedBadges = new Set(
-    xpData.badges.map((b) => b.title + b.xp) // crude uniqueness
-  );
+  const processedBadges = new Set(xpData.badges.map((b) => b.title + b.xp));
 
   for (const issue of issues) {
     if (!issue.body || processedIssues.has(issue.title)) continue;

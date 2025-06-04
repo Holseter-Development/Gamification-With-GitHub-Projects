@@ -1,18 +1,6 @@
 {
-  "xp": 50,
-  "leaderboard": [
-    {
-      "user": "JoachimHolseter",
-      "xp": 50
-    }
-  ],
-  "contributions": [
-    {
-      "user": "JoachimHolseter",
-      "title": "[Story] Test issue #5",
-      "xp": 50,
-      "timestamp": "2025-06-04T11:58:17.427Z",
-      "type": "issue"
-    }
-  ]
+  "xp": 0,
+  "leaderboard": [],
+  "contributions": [],
+  "badges": []
 }
