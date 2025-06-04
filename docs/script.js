@@ -101,11 +101,7 @@ function loadAchievementsAndXP() {
         img.src = file.download_url;
         img.alt = displayTitle;
         img.title = displayTitle;
-        img.style.width = "128px";
-        img.style.height = "128px";
-        img.style.objectFit = "contain";
-        img.style.borderRadius = "12px";
-        img.style.boxShadow = "0 0 6px rgba(0, 0, 0, 0.3)";
+        img.className = "achievement";
         grid.appendChild(img);
       });
 
