@@ -61,7 +61,7 @@ function animateXPBar(currentXP, xpToNext) {
 
 function showBadgeTooltip(img) {
   if (!tooltipEl) return;
-  tooltipEl.innerHTML = `<strong>${img.dataset.title}</strong><br>${img.dataset.xp} XP - Level ${img.dataset.level}`;
+  tooltipEl.innerHTML = `<strong>${img.dataset.title}</strong><br>${img.dataset.xp}XP - Level ${img.dataset.level}`;
   const rect = img.getBoundingClientRect();
   tooltipEl.style.left = `${rect.left + rect.width / 2 + window.scrollX}px`;
   tooltipEl.style.top = `${rect.top + window.scrollY - 8}px`;
@@ -120,14 +120,16 @@ function loadAchievementsAndXP() {
           title = namePart.replace(/[_-]/g, " ").trim();
         }
 
-        const displayTitle = `${title.toUpperCase()} - ${xp} XP - Level ${level}`;
+        // Remove any leading XP amount from the provided title
+        const cleanTitle = title.replace(/^\s*\d+\s*xp\s*/i, "").trim();
+
+        const displayTitle = `${cleanTitle.toUpperCase()} - ${xp} XP - Level ${level}`;
 
         const img = document.createElement("img");
         img.src = `achievements/${file}`;
         img.alt = displayTitle;
-        img.title = displayTitle;
         img.className = "achievement";
-        img.dataset.title = title;
+        img.dataset.title = cleanTitle;
         img.dataset.xp = xp;
         img.dataset.level = level;
 
