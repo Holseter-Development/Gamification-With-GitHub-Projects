@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Workforce Management Team</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <h1>Team Level: <span id="level">0</span></h1>
+    <progress id="xpBar" value="0" max="200"></progress>
+    <p id="xpText">0 / 200 XP</p>
+
+    <h2>Recent Activity</h2>
+    <ul id="leaderboard"></ul>
+    <h2>Achievements</h2>
+    <div id="achievements"></div>
+    <div id="achievement-tooltip" class="badge-tooltip"></div>
+  </body>
+</html>
