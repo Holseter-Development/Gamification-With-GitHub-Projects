@@ -1,138 +1,51 @@
 {
-  "xp": 1720,
+  "xp": 1900,
   "leaderboard": [
     {
-      "user": "JoachimHolseterBouvet",
-      "xp": 520
-    }
-  ],
-  "contributions": [
-    {
-      "user": "JoachimHolseterBouvet",
-      "title": "[Story] Test issue #9",
-      "xp": 110,
-      "timestamp": "2025-06-04T12:52:05.193Z",
-      "type": "issue"
+      "user": "JoachimHolseter",
+      "xp": 400
     },
     {
       "user": "JoachimHolseterBouvet",
-      "title": "[Story] Test issue #7",
-      "xp": 100,
-      "timestamp": "2025-06-04T12:52:05.193Z",
-      "type": "issue"
-    },
-    {
-      "user": "JoachimHolseterBouvet",
-      "title": "[Story] Test issue #5",
-      "xp": 50,
-      "timestamp": "2025-06-04T12:52:05.193Z",
-      "type": "issue"
-    },
-    {
-      "user": "JoachimHolseterBouvet",
-      "title": "[Story] Test issue #2",
-      "xp": 50,
-      "timestamp": "2025-06-04T12:52:05.193Z",
-      "type": "issue"
-    },
-    {
-      "user": "JoachimHolseterBouvet",
-      "title": "[Story] Test user story #1",
-      "xp": 210,
-      "timestamp": "2025-06-04T12:52:05.193Z",
-      "type": "issue"
-    },
-    {
-      "user": "team",
-      "action": "earned",
-      "title": "API TEAM LVL1",
-      "xp": 200,
-      "image": "https://raw.githubusercontent.com/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/main/docs/achievements/1_200XP_API-Team-lvl1.png",
-      "timestamp": "2025-06-04T12:52:05.287Z",
-      "type": "badge"
-    },
-    {
-      "user": "team",
-      "action": "earned",
-      "title": "BUG SLAYER LVL1",
-      "xp": 150,
-      "image": "https://raw.githubusercontent.com/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/main/docs/achievements/2_150xp_Bug-slayer_lvl1.png",
-      "timestamp": "2025-06-04T12:52:05.287Z",
-      "type": "badge"
-    },
-    {
-      "user": "team",
-      "action": "earned",
-      "title": "CODESEARCH LVL1",
-      "xp": 200,
-      "image": "https://raw.githubusercontent.com/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/main/docs/achievements/3_200Xp_CodeSearch-lvl1.png",
-      "timestamp": "2025-06-04T12:52:05.287Z",
-      "type": "badge"
-    },
-    {
-      "user": "team",
-      "action": "earned",
-      "title": "OKR WARRIORS LVL1",
-      "xp": 200,
-      "image": "https://raw.githubusercontent.com/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/main/docs/achievements/4_200XP_OKR-Warriors_lvl1.png",
-      "timestamp": "2025-06-04T12:52:05.287Z",
-      "type": "badge"
-    },
-    {
-      "user": "team",
-      "action": "earned",
-      "title": "POC RELEASED",
-      "xp": 300,
-      "image": "https://raw.githubusercontent.com/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/main/docs/achievements/5_300XP_POC-Released.png",
-      "timestamp": "2025-06-04T12:52:05.287Z",
-      "type": "badge"
-    },
-    {
-      "user": "team",
-      "action": "earned",
-      "title": "TEAMWORK LVL1",
-      "xp": 150,
-      "image": "https://raw.githubusercontent.com/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/main/docs/achievements/6_150XP_Teamwork_lvl1.png",
-      "timestamp": "2025-06-04T12:52:05.287Z",
-      "type": "badge"
+      "xp": 300
     }
   ],
   "badges": [
     {
-      "title": "API TEAM LVL1",
+      "file": "1_200XP_API-Team-lvl1.png",
+      "title": "200XP API Team",
       "xp": 200,
-      "image": "https://raw.githubusercontent.com/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/main/docs/achievements/1_200XP_API-Team-lvl1.png",
-      "timestamp": "2025-06-04T12:52:05.287Z"
+      "level": 1
     },
     {
-      "title": "BUG SLAYER LVL1",
+      "file": "2_150xp_Bug-slayer_lvl1.png",
+      "title": "150xp Bug slayer",
       "xp": 150,
-      "image": "https://raw.githubusercontent.com/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/main/docs/achievements/2_150xp_Bug-slayer_lvl1.png",
-      "timestamp": "2025-06-04T12:52:05.287Z"
+      "level": 1
     },
     {
-      "title": "CODESEARCH LVL1",
+      "file": "3_200Xp_CodeSearch-lvl1.png",
+      "title": "200Xp CodeSearch",
       "xp": 200,
-      "image": "https://raw.githubusercontent.com/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/main/docs/achievements/3_200Xp_CodeSearch-lvl1.png",
-      "timestamp": "2025-06-04T12:52:05.287Z"
+      "level": 1
     },
     {
-      "title": "OKR WARRIORS LVL1",
+      "file": "4_200XP_OKR-Warriors_lvl1.png",
+      "title": "200XP OKR Warriors",
       "xp": 200,
-      "image": "https://raw.githubusercontent.com/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/main/docs/achievements/4_200XP_OKR-Warriors_lvl1.png",
-      "timestamp": "2025-06-04T12:52:05.287Z"
+      "level": 1
     },
     {
-      "title": "POC RELEASED",
+      "file": "5_300XP_POC-Released.png",
+      "title": "300XP POC Released",
       "xp": 300,
-      "image": "https://raw.githubusercontent.com/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/main/docs/achievements/5_300XP_POC-Released.png",
-      "timestamp": "2025-06-04T12:52:05.287Z"
+      "level": 1
     },
     {
-      "title": "TEAMWORK LVL1",
+      "file": "6_150XP_Teamwork_lvl1.png",
+      "title": "150XP Teamwork",
       "xp": 150,
-      "image": "https://raw.githubusercontent.com/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/main/docs/achievements/6_150XP_Teamwork_lvl1.png",
-      "timestamp": "2025-06-04T12:52:05.287Z"
+      "level": 1
     }
   ]
 }

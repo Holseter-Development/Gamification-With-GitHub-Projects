@@ -2,36 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Workforce Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Workforce Management Team</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="script.js" defer></script>
   </head>
   <body>
-    <main>
-      <section class="card">
-        <h1>Workforce Management</h1>
-        <p>Level: <span id="level">0</span></p>
-        <progress id="xpBar" value="0" max="100"></progress>
-        <p id="xpText">0 / 100 XP</p>
-      </section>
+    <h1>Team Level: <span id="level">0</span></h1>
+    <progress id="xpBar" value="0" max="200"></progress>
+    <p id="xpText">0 / 200 XP</p>
 
-      <section id="leaderboardSection">
-        <h2>Leaderboard</h2>
-        <ul id="leaderboard"></ul>
-      </section>
-
-      <section id="contributionSection">
-        <h2>Contribution Log</h2>
-        <ul id="contributionLog"></ul>
-      </section>
-
-      <section id="achievements">
-        <h2>Achievements</h2>
-        <!-- Badge images inserted by script.js -->
-      </section>
-    </main>
-
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="script.js"></script>
+    <h2>Leaderboard</h2>
+    <ul id="leaderboard"></ul>
+    <h2>Achievements</h2>
+    <div id="achievements"></div>
+    <div id="achievement-tooltip" class="badge-tooltip"></div>
   </body>
 </html>

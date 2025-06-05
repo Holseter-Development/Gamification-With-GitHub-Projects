@@ -1,4 +1,3 @@
-// script.js
 let previousXP = 0;
 let previousLevel = 0;
 let hasInteracted = false;
@@ -7,24 +6,13 @@ const levelEl = document.getElementById("level");
 const xpBar = document.getElementById("xpBar");
 const xpText = document.getElementById("xpText");
 const leaderboardEl = document.getElementById("leaderboard");
-const leaderboardSection = document.getElementById("leaderboardSection");
 const achievementsEl = document.getElementById("achievements");
-const achievementsSection = document.getElementById("achievements");
-const contributionLogEl = document.getElementById("contributionLog");
-const contributionSection = document.getElementById("contributionSection");
+const tooltipEl = document.getElementById("achievement-tooltip");
+let activeAchievement = null;
+let leaderboardLoaded = false;
 
 const levelUpSound = new Audio("sounds/level-up.mp3");
 const coinSound = new Audio("sounds/coin.mp3");
-
-let config = {
-  showLeaderboard: true,
-  showContributionLog: false,
-  showBadges: true,
-  enableConfetti: true,
-  playsoundEffects: true,
-  refreshInterval: 10000,
-  xpLevelMultiplier: 1.1,
-};
 
 window.addEventListener("click", () => {
   hasInteracted = true;
@@ -37,7 +25,7 @@ function calculateLevel(xp) {
 
   while (remaining >= required) {
     remaining -= required;
-    required = Math.round((required * config.xpLevelMultiplier) / 10) * 10;
+    required = Math.round((required * 1.1) / 10) * 10;
     level++;
   }
 
@@ -50,16 +38,20 @@ function calculateLevel(xp) {
 }
 
 function animateXPBar(currentXP, xpToNext) {
-  let current = 0;
-  const increment = Math.ceil(currentXP / 120);
+  let current = parseInt(xpBar.value || 0, 10);
+  const distance = Math.abs(currentXP - current);
+  const increment = Math.ceil(distance / 120) || 1;
+  const direction = currentXP >= current ? 1 : -1;
 
   const animate = () => {
-    current += increment;
-    if (current > currentXP) current = currentXP;
+    current += increment * direction;
+    if ((direction === 1 && current > currentXP) || (direction === -1 && current < currentXP)) {
+      current = currentXP;
+    }
     xpBar.value = current;
     xpText.textContent = `${current} / ${xpToNext} XP`;
 
-    if (current < currentXP) {
+    if (current !== currentXP) {
       requestAnimationFrame(animate);
     }
   };
@@ -67,57 +59,43 @@ function animateXPBar(currentXP, xpToNext) {
   animate();
 }
 
-function updateVisibility() {
-  if (leaderboardSection)
-    leaderboardSection.style.display = config.showLeaderboard
-      ? "block"
-      : "none";
-  if (contributionSection)
-    contributionSection.style.display = config.showContributionLog
-      ? "block"
-      : "none";
-  if (achievementsSection)
-    achievementsSection.style.display = config.showBadges ? "block" : "none";
+function showBadgeTooltip(img) {
+  if (!tooltipEl) return;
+  tooltipEl.innerHTML = `<strong>${img.dataset.title}</strong><br>${img.dataset.xp} XP - Level ${img.dataset.level}`;
+  const rect = img.getBoundingClientRect();
+  tooltipEl.style.left = `${rect.left + rect.width / 2 + window.scrollX}px`;
+  tooltipEl.style.top = `${rect.top + window.scrollY - 8}px`;
+  tooltipEl.classList.add("show");
+}
+
+function hideBadgeTooltip() {
+  if (!tooltipEl) return;
+  tooltipEl.classList.remove("show");
+}
+
+function getAuthToken() {
+  const params = new URLSearchParams(window.location.search);
+  const paramToken = params.get("token");
+  if (paramToken) {
+    try {
+      localStorage.setItem("github_token", paramToken);
+    } catch (e) {
+      console.warn("Unable to store token in localStorage", e);
+    }
+    return paramToken;
+  }
+  try {
+    return localStorage.getItem("github_token");
+  } catch (e) {
+    return null;
+  }
 }
 
 function loadAchievementsAndXP() {
-  fetch("./config.json")
+  fetch(`xp.json?t=${Date.now()}`)
     .then((res) => res.json())
-    .then((cfg) => {
-      config = cfg;
-      updateVisibility();
-      return Promise.all([
-        fetch("./xp.json").then((res) => res.json()),
-        fetch(
-          "https://api.github.com/repos/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/contents/docs/achievements"
-        ).then((res) => res.json()),
-      ]);
-    })
-    .then(([xpData, badgeFiles]) => {
-      if (!Array.isArray(badgeFiles)) badgeFiles = [];
-
-      const parsedBadges = badgeFiles.filter((f) =>
-        f.name.match(/\d+_(\d+)xp_([\w\-]+)\.png/i)
-      );
-
-      parsedBadges.sort((a, b) => {
-        const ai = parseInt(a.name.split("_")[0]);
-        const bi = parseInt(b.name.split("_")[0]);
-        return bi - ai;
-      });
-
-      const badgeContributions = parsedBadges.map((file) => {
-        const match = file.name.match(/\d+_(\d+)xp_([\w\-]+)\.png/i);
-        const xp = parseInt(match[1]);
-        const title = match[2].replace(/[_\-]/g, " ").toUpperCase();
-        return {
-          user: "team",
-          action: "earned",
-          title,
-          xp,
-          image: file.download_url,
-        };
-      });
+    .then((data) => {
+      const badges = data.badges || [];
 
       achievementsEl.innerHTML = "";
       const grid = document.createElement("div");
@@ -129,42 +107,69 @@ function loadAchievementsAndXP() {
       grid.style.maxWidth = "700px";
       grid.style.margin = "0 auto";
 
-      badgeContributions.forEach((entry) => {
+      badges.forEach((badge) => {
+        const file = badge.file || badge;
+        const xp = badge.xp || parseInt((file.match(/_(\d+)xp_/i) || [0, 0])[1]);
+        const level = badge.level || parseInt((file.match(/(?:_|-)lvl(\d+)/i) || [0, 1])[1]);
+        let title = badge.title;
+        if (!title) {
+          let namePart = file.replace(/\.png$/i, "");
+          const lvlMatch = namePart.match(/(?:_|-)lvl(\d+)/i);
+          if (lvlMatch) namePart = namePart.replace(lvlMatch[0], "");
+          namePart = namePart.replace(/^[0-9]+_/, "").replace(/_(\d+)xp_?/i, "");
+          title = namePart.replace(/[_-]/g, " ").trim();
+        }
+
+        const displayTitle = `${title.toUpperCase()} - ${xp} XP - Level ${level}`;
+
         const img = document.createElement("img");
-        img.src = entry.image;
-        img.alt = entry.title;
-        img.title = `${entry.title} - ${entry.xp}XP`;
-        img.style.width = "128px";
-        img.style.height = "128px";
-        img.style.objectFit = "contain";
-        img.style.borderRadius = "12px";
-        img.style.boxShadow = "0 0 6px rgba(0, 0, 0, 0.3)";
+        img.src = `achievements/${file}`;
+        img.alt = displayTitle;
+        img.title = displayTitle;
+        img.className = "achievement";
+        img.dataset.title = title;
+        img.dataset.xp = xp;
+        img.dataset.level = level;
+
+        img.addEventListener("mouseenter", () => showBadgeTooltip(img));
+        img.addEventListener("mouseleave", () => {
+          if (activeAchievement !== img) hideBadgeTooltip();
+        });
+        img.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (activeAchievement === img) {
+            img.classList.remove("active");
+            activeAchievement = null;
+            hideBadgeTooltip();
+          } else {
+            if (activeAchievement) activeAchievement.classList.remove("active");
+            activeAchievement = img;
+            img.classList.add("active");
+            showBadgeTooltip(img);
+          }
+        });
+
         grid.appendChild(img);
       });
 
       achievementsEl.appendChild(grid);
 
-      const contributions = [
-        ...(xpData.contributions || []),
-        ...badgeContributions,
-      ];
-
       updateDisplay({
-        xp: xpData.xp,
-        leaderboard: xpData.leaderboard,
-        contributions,
+        xp: data.xp || 0,
+        leaderboard: data.leaderboard || [],
       });
     });
 }
 
 function updateDisplay(data) {
   const progress = calculateLevel(data.xp);
+  if (!levelEl || !xpBar || !xpText || !leaderboardEl) return;
+
   const leveledUp = progress.level > previousLevel;
 
-  if (leveledUp && hasInteracted && config.enableConfetti) {
-    if (config.playsoundEffects) levelUpSound.play();
-    const previousMax =
-      Math.round(progress.xpToNext / config.xpLevelMultiplier / 10) * 10;
+  if (leveledUp && hasInteracted) {
+    levelUpSound.play();
+    const previousMax = Math.round(progress.xpToNext / 1.1 / 10) * 10;
     animateXPBar(previousMax, previousMax);
     xpText.textContent = `${previousMax} / ${previousMax} XP`;
 
@@ -186,65 +191,42 @@ function updateDisplay(data) {
     animateXPBar(progress.currentXP, progress.xpToNext);
   }
 
+
+  if (leaderboardLoaded) {
+    leaderboardEl.classList.add("loaded");
+  }
+  leaderboardEl.innerHTML = "";
+  data.leaderboard
+    .sort((a, b) => b.xp - a.xp)
+    .forEach((entry) => {
+      const li = document.createElement("li");
+      const img = document.createElement("img");
+      img.src = `https://github.com/${entry.user}.png?size=64`;
+      img.alt = entry.user;
+      const span = document.createElement("span");
+      span.textContent = `${entry.user} - ${entry.xp} XP`;
+      li.appendChild(img);
+      li.appendChild(span);
+      leaderboardEl.appendChild(li);
+    });
+  if (!leaderboardLoaded) {
+    leaderboardLoaded = true;
+  }
   previousLevel = progress.level;
   previousXP = progress.totalXP;
-
-  if (config.showContributionLog && Array.isArray(data.contributions)) {
-    contributionLogEl.innerHTML = "<ul></ul>";
-    const ul = contributionLogEl.querySelector("ul");
-    data.contributions
-      .slice(-5)
-      .reverse()
-      .forEach((entry, index) => {
-        const li = document.createElement("li");
-        if (index === 4) li.style.opacity = "0.5";
-
-        if (entry.image) {
-          const img = document.createElement("img");
-          img.src = entry.image;
-          img.alt = entry.title;
-          img.width = 32;
-          img.height = 32;
-          img.style.marginRight = "0.5rem";
-          li.appendChild(img);
-        }
-
-        const text = document.createElement("span");
-        text.textContent = `✅ ${entry.user} ${entry.action || "closed"} "${
-          entry.title
-        }" - ${entry.xp}XP`;
-        li.appendChild(text);
-
-        ul.appendChild(li);
-      });
-  }
-
-  if (config.showLeaderboard && Array.isArray(data.leaderboard)) {
-    leaderboardEl.innerHTML = "<ul></ul>";
-    const ul = leaderboardEl.querySelector("ul");
-    data.leaderboard
-      .sort((a, b) => b.xp - a.xp)
-      .slice(0, 5)
-      .forEach((entry, index) => {
-        const li = document.createElement("li");
-        if (index === 4) li.style.opacity = "0.5";
-
-        const avatar = document.createElement("img");
-        avatar.src = `https://github.com/${entry.user}.png`;
-        avatar.alt = entry.user;
-        avatar.width = 48;
-        avatar.height = 48;
-        li.appendChild(avatar);
-
-        const text = document.createElement("span");
-        text.textContent = `@${entry.user} - ${entry.xp} XP`;
-        li.appendChild(text);
-
-        ul.appendChild(li);
-      });
-  }
 }
 
 fetchAndUpdate = loadAchievementsAndXP;
 fetchAndUpdate();
-setInterval(fetchAndUpdate, config.refreshInterval);
+// Poll every 30 seconds instead of 10 to reduce API requests
+setInterval(fetchAndUpdate, 30000);
+
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".achievement")) {
+    if (activeAchievement) {
+      activeAchievement.classList.remove("active");
+      activeAchievement = null;
+    }
+    hideBadgeTooltip();
+  }
+});
