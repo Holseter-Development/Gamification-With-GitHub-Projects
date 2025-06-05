@@ -73,6 +73,24 @@ function hideBadgeTooltip() {
   tooltipEl.classList.remove("show");
 }
 
+function getAuthToken() {
+  const params = new URLSearchParams(window.location.search);
+  const paramToken = params.get("token");
+  if (paramToken) {
+    try {
+      localStorage.setItem("github_token", paramToken);
+    } catch (e) {
+      console.warn("Unable to store token in localStorage", e);
+    }
+    return paramToken;
+  }
+  try {
+    return localStorage.getItem("github_token");
+  } catch (e) {
+    return null;
+  }
+}
+
 function loadAchievementsAndXP() {
   const hostParts = window.location.hostname.split(".");
   let owner = hostParts[0];
@@ -84,7 +102,9 @@ function loadAchievementsAndXP() {
 
   const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/docs/achievements`;
   console.log("Fetching achievements from", apiUrl);
-  fetch(apiUrl)
+  const token = getAuthToken();
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  fetch(apiUrl, { headers })
     .then((res) => res.json())
     .then((files) => {
       if (!Array.isArray(files)) return;
@@ -229,7 +249,8 @@ function updateDisplay(data) {
 
 fetchAndUpdate = loadAchievementsAndXP;
 fetchAndUpdate();
-setInterval(fetchAndUpdate, 10000);
+// Poll every 30 seconds instead of 10 to reduce API requests
+setInterval(fetchAndUpdate, 30000);
 
 document.addEventListener("click", (e) => {
   if (!e.target.closest(".achievement")) {

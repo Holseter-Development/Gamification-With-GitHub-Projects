@@ -33,6 +33,22 @@ git clone https://github.com/JoachimHolseterBouvet/Gamification-With-GitHub-Proj
 cd Gamification-With-GitHub-Projects
 ```
 
+### 2. Provide a GitHub Token (optional but recommended)
+
+The dashboard fetches badge images from the GitHub REST API. Anonymous requests
+are rate limited to 60 per hour, which can cause `403` errors if the page polls
+often. To increase the limit, supply a personal access token:
+
+1. Create a token on GitHub with read-only repository access.
+2. Pass the token in the page URL, e.g. `?token=YOURTOKEN`, or store it in your
+   browser using the console:
+
+   ```javascript
+   localStorage.setItem('github_token', 'YOURTOKEN');
+   ```
+
+The script will automatically use the token for authenticated requests.
+
 ## 🙌 Contributions
 
 Contributions are welcome — whether it's new features, better visuals, or anything else. This is an open experiment in making digital workspaces just a little more human.
