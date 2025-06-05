@@ -1,5 +1,5 @@
 {
-  "xp": 450,
+  "xp": 1650,
   "leaderboard": [
     {
       "user": "JoachimHolseter",
@@ -8,6 +8,44 @@
     {
       "user": "JoachimHolseterBouvet",
       "xp": 300
+    }
+  ],
+  "badges": [
+    {
+      "file": "1_200XP_API-Team-lvl1.png",
+      "title": "200XP API Team",
+      "xp": 200,
+      "level": 1
+    },
+    {
+      "file": "2_150xp_Bug-slayer_lvl1.png",
+      "title": "150xp Bug slayer",
+      "xp": 150,
+      "level": 1
+    },
+    {
+      "file": "3_200Xp_CodeSearch-lvl1.png",
+      "title": "200Xp CodeSearch",
+      "xp": 200,
+      "level": 1
+    },
+    {
+      "file": "4_200XP_OKR-Warriors_lvl1.png",
+      "title": "200XP OKR Warriors",
+      "xp": 200,
+      "level": 1
+    },
+    {
+      "file": "5_300XP_POC-Released.png",
+      "title": "300XP POC Released",
+      "xp": 300,
+      "level": 1
+    },
+    {
+      "file": "6_150XP_Teamwork_lvl1.png",
+      "title": "150XP Teamwork",
+      "xp": 150,
+      "level": 1
     }
   ]
 }

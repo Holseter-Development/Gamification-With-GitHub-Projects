@@ -1,0 +1,27 @@
+name: Update Badges XP
+
+on:
+  push:
+    paths:
+      - 'docs/achievements/**'
+      - '.github/scripts/update-badges.js'
+      - '.github/workflows/update-badges.yml'
+
+jobs:
+  badges:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Update badges
+        run: node .github/scripts/update-badges.js
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/xp.json
+          git diff --cached --quiet || git commit -m "🔄 Update badges XP"
+          git push --force-with-lease
