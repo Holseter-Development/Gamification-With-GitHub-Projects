@@ -216,7 +216,7 @@ function updateDisplay(data) {
   previousXP = progress.totalXP;
 }
 
-fetchAndUpdate = loadAchievementsAndXP;
+const fetchAndUpdate = loadAchievementsAndXP;
 fetchAndUpdate();
 // Poll every 30 seconds instead of 10 to reduce API requests
 setInterval(fetchAndUpdate, 30000);
