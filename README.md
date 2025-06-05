@@ -10,6 +10,7 @@ A static web dashboard (hosted via GitHub Pages) that:
 - Automatically levels up the team with celebratory sounds and confetti
 - Displays a live leaderboard with GitHub avatars
 - Collects and displays visual achievements (badges) in a scrollable gallery
+- Deploys an `/experimental` build from the `Experimental` branch for testing
 
 Ideal for running on a screen in a team room — encouraging celebration, progress, and a bit of fun competition.
 
