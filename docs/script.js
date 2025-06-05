@@ -111,7 +111,6 @@ function loadAchievementsAndXP() {
         totalXP += xp;
 
         let namePart = file.name
-          .replace(/^\d+_\d+xp_/, "")
           .replace(/\.png$/i, "");
         const lvlMatch = namePart.match(/(?:_|-)lvl(\d+)/i);
         const level = lvlMatch ? parseInt(lvlMatch[1]) : 1;
