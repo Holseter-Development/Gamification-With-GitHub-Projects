@@ -1,0 +1,39 @@
+name: Deploy Experimental Site
+
+on:
+  push:
+    branches:
+      - Experimental
+    paths:
+      - 'docs/**'
+      - '.github/workflows/deploy-experimental.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+
+      - name: Checkout Experimental branch
+        uses: actions/checkout@v4
+        with:
+          ref: Experimental
+          path: experimental
+
+      - name: Sync experimental site
+        run: |
+          rm -rf main/docs/experimental
+          cp -r experimental/docs main/docs/experimental
+
+      - name: Commit changes
+        run: |
+          cd main
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/experimental
+          git diff --cached --quiet || git commit -m "🚀 Deploy experimental site"
+          git push --force-with-lease
