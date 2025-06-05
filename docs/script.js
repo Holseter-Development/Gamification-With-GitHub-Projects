@@ -92,34 +92,10 @@ function getAuthToken() {
 }
 
 function loadAchievementsAndXP() {
-  const hostParts = window.location.hostname.split(".");
-  let owner = hostParts[0];
-  let repo = window.location.pathname.replace(/^\//, "").split("/")[0] || "Gamification-With-GitHub-Projects";
-
-  if (hostParts[0] === "www" && hostParts.length > 2) {
-    owner = hostParts[1];
-  }
-
-  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/docs/achievements`;
-  console.log("Fetching achievements from", apiUrl);
-  const token = getAuthToken();
-  const headers = token ? { Authorization: `Bearer ${token}` } : {};
-  fetch(apiUrl, { headers })
+  fetch(`xp.json?t=${Date.now()}`)
     .then((res) => res.json())
-    .then((files) => {
-      if (!Array.isArray(files)) return;
-
-      const badgeFiles = files.filter((f) =>
-        f.name.match(/^[0-9]+_[0-9]+xp_/i)
-      );
-
-      badgeFiles.sort((a, b) => {
-        const ai = parseInt(a.name.split("_")[0]);
-        const bi = parseInt(b.name.split("_")[0]);
-        return bi - ai;
-      });
-
-      let totalXP = 0;
+    .then((data) => {
+      const badges = data.badges || [];
 
       achievementsEl.innerHTML = "";
       const grid = document.createElement("div");
@@ -131,30 +107,27 @@ function loadAchievementsAndXP() {
       grid.style.maxWidth = "700px";
       grid.style.margin = "0 auto";
 
-      badgeFiles.forEach((file) => {
-        const xpMatch = file.name.match(/_(\d+)xp_/i);
-        if (!xpMatch) return;
-
-        const xp = parseInt(xpMatch[1]);
-        totalXP += xp;
-
-        let namePart = file.name
-          .replace(/\.png$/i, "");
-        const lvlMatch = namePart.match(/(?:_|-)lvl(\d+)/i);
-        const level = lvlMatch ? parseInt(lvlMatch[1]) : 1;
-        if (lvlMatch) {
-          namePart = namePart.replace(lvlMatch[0], "");
+      badges.forEach((badge) => {
+        const file = badge.file || badge;
+        const xp = badge.xp || parseInt((file.match(/_(\d+)xp_/i) || [0, 0])[1]);
+        const level = badge.level || parseInt((file.match(/(?:_|-)lvl(\d+)/i) || [0, 1])[1]);
+        let title = badge.title;
+        if (!title) {
+          let namePart = file.replace(/\.png$/i, "");
+          const lvlMatch = namePart.match(/(?:_|-)lvl(\d+)/i);
+          if (lvlMatch) namePart = namePart.replace(lvlMatch[0], "");
+          namePart = namePart.replace(/^[0-9]+_/, "").replace(/_(\d+)xp_?/i, "");
+          title = namePart.replace(/[_-]/g, " ").trim();
         }
 
-        const rawTitle = namePart.replace(/[_\-]/g, " ").trim();
-        const displayTitle = `${rawTitle.toUpperCase()} - ${xp} XP - Level ${level}`;
+        const displayTitle = `${title.toUpperCase()} - ${xp} XP - Level ${level}`;
 
         const img = document.createElement("img");
-        img.src = file.download_url;
+        img.src = `achievements/${file}`;
         img.alt = displayTitle;
         img.title = displayTitle;
         img.className = "achievement";
-        img.dataset.title = rawTitle;
+        img.dataset.title = title;
         img.dataset.xp = xp;
         img.dataset.level = level;
 
@@ -181,14 +154,10 @@ function loadAchievementsAndXP() {
 
       achievementsEl.appendChild(grid);
 
-      fetch(`xp.json?t=${Date.now()}`)
-        .then((res) => res.json())
-        .then((data) => {
-          updateDisplay({
-            xp: totalXP,
-            leaderboard: data.leaderboard || [],
-          });
-        });
+      updateDisplay({
+        xp: data.xp || 0,
+        leaderboard: data.leaderboard || [],
+      });
     });
 }
 
