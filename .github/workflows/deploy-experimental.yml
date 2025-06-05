@@ -1,0 +1,36 @@
+name: Deploy Experimental to GitHub Pages
+
+on:
+  push:
+    branches:
+      - experimental
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout experimental branch
+        uses: actions/checkout@v4
+
+      - name: Prepare subfolder for experimental
+        run: |
+          mkdir -p site/experimental
+          cp -r docs/* site/experimental/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload experimental site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
