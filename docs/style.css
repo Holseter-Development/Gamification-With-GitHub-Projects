@@ -132,6 +132,34 @@ ul#leaderboard li:hover img {
   object-fit: contain;
   border-radius: 12px;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.achievement:hover,
+.achievement.active {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px #00c6ff;
+  z-index: 5;
+}
+
+.badge-tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.badge-tooltip.show {
+  opacity: 1;
 }
 
 /* Animations */
