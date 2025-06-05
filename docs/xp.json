@@ -1,15 +1,5 @@
 {
   "xp": 2270,
-  "leaderboard": [
-    {
-      "user": "JoachimHolseter",
-      "xp": 400
-    },
-    {
-      "user": "JoachimHolseterBouvet",
-      "xp": 670
-    }
-  ],
   "badges": [
     {
       "file": "1_200XP_API-Team-lvl1.png",
@@ -47,5 +37,6 @@
       "xp": 150,
       "level": 1
     }
-  ]
+  ],
+  "recent": []
 }

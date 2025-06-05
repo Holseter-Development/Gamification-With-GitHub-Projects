@@ -22,18 +22,17 @@ if (!assignee || !xpAmount) {
   process.exit(0);
 }
 
-let xpData = { xp: 0, level: 1, xpToNext: 100, leaderboard: [] };
+let xpData = { xp: 0, recent: [], badges: [] };
 if (fs.existsSync(xpPath)) {
   xpData = JSON.parse(fs.readFileSync(xpPath, "utf8"));
 }
 
 xpData.xp += xpAmount;
 
-const userEntry = xpData.leaderboard.find((u) => u.user === assignee);
-if (userEntry) {
-  userEntry.xp += xpAmount;
-} else {
-  xpData.leaderboard.push({ user: assignee, xp: xpAmount });
+xpData.recent = xpData.recent || [];
+xpData.recent.unshift({ user: assignee, title: issue.title, xp: xpAmount });
+if (xpData.recent.length > 5) {
+  xpData.recent.pop();
 }
 
 fs.writeFileSync(xpPath, JSON.stringify(xpData, null, 2));

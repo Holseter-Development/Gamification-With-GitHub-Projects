@@ -158,7 +158,7 @@ function loadAchievementsAndXP() {
 
       updateDisplay({
         xp: data.xp || 0,
-        leaderboard: data.leaderboard || [],
+        recent: data.recent || [],
       });
     });
 }
@@ -198,19 +198,17 @@ function updateDisplay(data) {
     leaderboardEl.classList.add("loaded");
   }
   leaderboardEl.innerHTML = "";
-  data.leaderboard
-    .sort((a, b) => b.xp - a.xp)
-    .forEach((entry) => {
-      const li = document.createElement("li");
-      const img = document.createElement("img");
-      img.src = `https://github.com/${entry.user}.png?size=64`;
-      img.alt = entry.user;
-      const span = document.createElement("span");
-      span.textContent = `${entry.user} - ${entry.xp} XP`;
-      li.appendChild(img);
-      li.appendChild(span);
-      leaderboardEl.appendChild(li);
-    });
+  data.recent.forEach((entry) => {
+    const li = document.createElement("li");
+    const img = document.createElement("img");
+    img.src = `https://github.com/${entry.user}.png?size=64`;
+    img.alt = entry.user;
+    const span = document.createElement("span");
+    span.textContent = `${entry.user} closed ${entry.title} + ${entry.xp}XP`;
+    li.appendChild(img);
+    li.appendChild(span);
+    leaderboardEl.appendChild(li);
+  });
   if (!leaderboardLoaded) {
     leaderboardLoaded = true;
   }

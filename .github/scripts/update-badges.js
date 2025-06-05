@@ -4,7 +4,7 @@ const path = require('path');
 const xpPath = path.join(__dirname, '../../docs/xp.json');
 const badgesDir = path.join(__dirname, '../../docs/achievements');
 
-let xpData = { xp: 0, leaderboard: [] };
+let xpData = { xp: 0, recent: [], badges: [] };
 if (fs.existsSync(xpPath)) {
   xpData = JSON.parse(fs.readFileSync(xpPath, 'utf8'));
 }

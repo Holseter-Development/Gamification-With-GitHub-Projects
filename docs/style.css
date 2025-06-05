@@ -65,7 +65,7 @@ progress::-webkit-progress-value {
   color: #aaddff;
 }
 
-/* Leaderboard */
+/* Activity Feed */
 ul#leaderboard {
   margin-bottom: 2rem;
   list-style: none;
