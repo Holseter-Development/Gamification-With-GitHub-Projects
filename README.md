@@ -8,7 +8,7 @@ A static web dashboard (hosted via GitHub Pages) that:
 
 - Tracks completed issues and assigns XP based on custom templates
 - Automatically levels up the team with celebratory sounds and confetti
-- Displays a live leaderboard with GitHub avatars
+- Shows a feed of the latest completed issues with GitHub avatars
 - Collects and displays visual achievements (badges) in a scrollable gallery
 
 Ideal for running on a screen in a team room — encouraging celebration, progress, and a bit of fun competition.
