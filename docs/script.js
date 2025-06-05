@@ -74,9 +74,17 @@ function hideBadgeTooltip() {
 }
 
 function loadAchievementsAndXP() {
-  fetch(
-    "https://api.github.com/repos/JoachimHolseterBouvet/Gamification-With-GitHub-Projects/contents/docs/achievements"
-  )
+  const hostParts = window.location.hostname.split(".");
+  let owner = hostParts[0];
+  let repo = window.location.pathname.replace(/^\//, "").split("/")[0] || "Gamification-With-GitHub-Projects";
+
+  if (hostParts[0] === "www" && hostParts.length > 2) {
+    owner = hostParts[1];
+  }
+
+  const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/docs/achievements`;
+  console.log("Fetching achievements from", apiUrl);
+  fetch(apiUrl)
     .then((res) => res.json())
     .then((files) => {
       if (!Array.isArray(files)) return;
