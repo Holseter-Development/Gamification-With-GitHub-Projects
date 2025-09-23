@@ -1,4 +1,4 @@
-# 🏆 Gamification With GitHub projects – A Team Gamification PoC
+# 🏆 Gamification With GitHub projects – PoC
 
 This is a **proof of concept** that transforms your GitHub workflow into a shared, visual XP tracker. Designed for teams working together in the same physical space, this project introduces light gamification to modern knowledge work — turning daily effort into a collective journey.
 
