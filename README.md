@@ -1,6 +1,6 @@
-# 🏆 Gamification With GitHub projects – PoC
+# 🏆 Gamification With GitHub projects - PoC
 
-This is a **proof of concept** that transforms your GitHub workflow into a shared, visual XP tracker. Designed for teams working together in the same physical space, this project introduces light gamification to modern knowledge work — turning daily effort into a collective journey.
+This is a **proof of concept** that transforms your GitHub workflow into a shared, visual XP tracker. Designed for teams working together in the same physical space, this project introduces light gamification to modern knowledge work - turning daily effort into a collective journey.
 
 ## ✨ What It Is
 
@@ -12,7 +12,7 @@ A static web dashboard (hosted via GitHub Pages) that:
 - Collects and displays visual achievements (badges) in a scrollable gallery
 - Deploys an `/experimental` build from the `Experimental` branch for testing
 
-Ideal for running on a screen in a team room — encouraging celebration, progress, and a bit of fun competition.
+Ideal for running on a screen in a team room - encouraging celebration, progress, and a bit of fun competition.
 
 ---
 
@@ -21,7 +21,7 @@ Ideal for running on a screen in a team room — encouraging celebration, progre
 > _"Work doesn't need to be soulless to be professional."_
 
 This project aims to gently restore a sense of momentum and shared purpose in teams. It adds visibility to the invisible: the effort behind closed issues, completed tasks, and quiet contributions.  
-Gamification isn't about trivializing work — it's about **recognizing progress** and inviting joy.
+Gamification isn't about trivializing work - it's about **recognizing progress** and inviting joy.
 
 ---
 
@@ -52,7 +52,7 @@ The script will automatically use the token for authenticated requests.
 
 ## 🙌 Contributions
 
-Contributions are welcome — whether it's new features, better visuals, or anything else. This is an open experiment in making digital workspaces just a little more human.
+Contributions are welcome - whether it's new features, better visuals, or anything else. This is an open experiment in making digital workspaces just a little more human.
 
 ---
 
