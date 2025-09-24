@@ -1,5 +1,5 @@
 {
-  "xp": 3790,
+  "xp": 4140,
   "leaderboard": [
     {
       "user": "JoachimHolseter",
@@ -50,6 +50,12 @@
     {
       "file": "7_350XP_Refactor-Kings_lvl1.png",
       "title": "350XP Refactor Kings",
+      "xp": 350,
+      "level": 1
+    },
+    {
+      "file": "8_350XP_Fagkaffe-Demo_lvl1.png",
+      "title": "350XP Fagkaffe Demo",
       "xp": 350,
       "level": 1
     }
