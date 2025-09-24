@@ -1,5 +1,5 @@
 {
-  "xp": 3690,
+  "xp": 3390,
   "leaderboard": [
     {
       "user": "JoachimHolseter",
@@ -45,12 +45,6 @@
       "file": "6_150XP_Teamwork_lvl1.png",
       "title": "150XP Teamwork",
       "xp": 150,
-      "level": 1
-    },
-    {
-      "file": "7_300XP_Refactor-Kings_lvl1.png",
-      "title": "300XP Refactor Kings",
-      "xp": 300,
       "level": 1
     }
   ]
