@@ -2,27 +2,56 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Team Gamification Dashboard</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="script.js" defer></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
   </head>
   <body>
-    <h1>Team Level: <span id="level">0</span></h1>
-    <progress id="xpBar" value="0" max="200"></progress>
-    <p id="xpText">0 / 200 XP</p>
+    <div class="header">
+      <h1 class="animate__animated animate__zoomIn">
+        Team Gamification Dashboard
+      </h1>
+    </div>
 
-    <h2>Leaderboard</h2>
-    <ul id="leaderboard"></ul>
-    <h2>Achievements</h2>
-    <div id="achievements"></div>
-    <div id="achievement-tooltip" class="badge-tooltip"></div>
+    <div class="dashboard-container">
+      <div class="main-content">
+        <h2 class="animate__animated animate__fadeIn">Team Level</h2>
+        <div class="level-container animate__animated animate__fadeIn">
+          <span id="level-number">1</span>
+          <div class="xp-bar-container">
+            <div class="xp-bar" id="xp-bar"></div>
+          </div>
+        </div>
+
+        <div
+          id="team-stats-grid"
+          class="team-stats-grid animate__animated animate__fadeIn"
+        ></div>
+      </div>
+
+      <div class="side-panel">
+        <div
+          id="recent-activity-feed"
+          class="activity-feed-container animate__animated animate__fadeInRight"
+        >
+          <h2>Recent Team Triumphs</h2>
+          <ul id="activity-list"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="achievements-container"
+      class="achievements-container animate__animated animate__fadeInUp"
+    >
+      <h2>Team Achievements</h2>
+      <ul id="achievements"></ul>
+    </div>
+
+    <script src="script.js"></script>
   </body>
 </html>

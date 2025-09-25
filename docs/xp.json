@@ -1,19 +1,13 @@
 {
-  "xp": 9590,
-  "leaderboard": [
-    {
-      "user": "JoachimHolseter",
-      "xp": 830
-    },
-    {
-      "user": "JoachimHolseterBouvet",
-      "xp": 1410
-    },
-    {
-      "user": "RobinKoiGjelsvik",
-      "xp": 5450
-    }
-  ],
+  "totalXP": 3690,
+  "teamStats": {
+    "bugsClosedCount": 0,
+    "userStoriesClosedCount": 0,
+    "avgIssueOpenTimeHours": 0,
+    "fastestBugCloseTimeHours": 0,
+    "qualityScore": 0
+  },
+  "recentActivity": [],
   "badges": [
     {
       "file": "1_200XP_API-Team-lvl1.png",
@@ -52,15 +46,9 @@
       "level": 1
     },
     {
-      "file": "7_350XP_Refactor-Kings_lvl1.png",
-      "title": "350XP Refactor Kings",
-      "xp": 350,
-      "level": 1
-    },
-    {
-      "file": "8_350XP_Fagkaffe-Demo_lvl1.png",
-      "title": "350XP Fagkaffe Demo",
-      "xp": 350,
+      "file": "7_300XP_Refactor-Kings_lvl1.png",
+      "title": "300XP Refactor Kings",
+      "xp": 300,
       "level": 1
     }
   ]
